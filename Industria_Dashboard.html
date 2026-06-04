@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Minuta — Hyundai / Andinamotors · Cierre Mayo 2026</title>
 <style>
-:root { --primary:#002c5f; --accent:#00aad2; --accent-2:#e97132; --bg:#f4f6f9; --card:#fff; --text:#1a1a1a; --muted:#5a6470; --border:#d8dde5; --success:#196b24; --warning:#e97132; --danger:#c0392b; }
+:root { --primary:#002c5f; --accent:#00aad2; --accent-2:#e97132; --bg:#f4f6f9; --card:#fff; --text:#1a1a1a; --muted:#5a6470; --border:#d8dde5; --success:#196b24; --warning:#e97132; --danger:#c0392b; --mkt:#8e44ad; }
 * { box-sizing:border-box; }
 body { margin:0; font-family:'Segoe UI',Roboto,system-ui,sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
 header { background:linear-gradient(135deg,var(--primary),#003d80); color:white; padding:28px 32px; box-shadow:0 2px 8px rgba(0,0,0,.1); }
@@ -29,9 +29,15 @@ details.section > summary::after { content:"▼"; font-size:10px; color:var(--mu
 details.section[open] > summary::after { transform:rotate(180deg); }
 details.section.info > summary { border-left-color:#8e44ad; }
 details.section.tarde > summary { border-left-color:var(--accent-2); }
+details.section.agencias > summary { border-left-color:#1abc9c; }
+details.section.mkt > summary { border-left-color:var(--mkt); }
+details.section.mktplan > summary { border-left-color:#d63384; }
 .section-tag { display:inline-block; background:var(--accent); color:white; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600; text-transform:uppercase; letter-spacing:.5px; margin-left:8px; }
 .section-tag.tarde { background:var(--accent-2); }
 .section-tag.info { background:#8e44ad; }
+.section-tag.agencias { background:#1abc9c; }
+.section-tag.mkt { background:var(--mkt); }
+.section-tag.mktplan { background:#d63384; }
 .section-body { padding:18px; border-top:1px solid var(--border); }
 .field-label { font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin:14px 0 6px; display:block; }
 .field-label:first-child { margin-top:0; }
@@ -51,7 +57,6 @@ table.data th { background:var(--primary); color:white; padding:10px 12px; text-
 table.data td { padding:10px 12px; border-bottom:1px solid var(--border); }
 table.data tr.total td { background:#f0f6fb; font-weight:700; color:var(--primary); border-top:2px solid var(--primary); }
 table.data .num { text-align:right; font-variant-numeric:tabular-nums; }
-table.data .pct-cell { color:var(--accent); font-weight:600; }
 table.data .ok { color:var(--success); font-weight:700; }
 table.data .warn { color:var(--warning); font-weight:700; }
 table.data .bad { color:var(--danger); font-weight:700; }
@@ -61,28 +66,54 @@ table.data .bad { color:var(--danger); font-weight:700; }
 .topic-card h4 { margin:0 0 6px; font-size:14px; color:var(--primary); }
 .topic-card .range { font-size:11px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
 .topic-card .desc { font-size:12px; color:var(--text); margin-top:6px; line-height:1.4; }
+.agency-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px; margin-bottom:18px; }
+.agency-card { background:linear-gradient(135deg,#fff,#f8fbff); border:2px solid var(--border); border-radius:10px; padding:18px; cursor:pointer; transition:all .2s; position:relative; }
+.agency-card:hover { border-color:#1abc9c; box-shadow:0 4px 16px rgba(26,188,156,.2); transform:translateY(-2px); }
+.agency-card .agency-name { font-size:16px; font-weight:700; color:var(--primary); margin-bottom:4px; }
+.agency-card .agency-range { font-size:11px; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.5px; }
+.agency-card .agency-metric { margin-top:10px; display:flex; gap:10px; flex-wrap:wrap; }
+.agency-card .pill { background:white; border:1px solid var(--border); border-radius:14px; padding:4px 10px; font-size:11px; font-weight:600; color:var(--primary); }
+.agency-card .pill.ok { background:#e8f5e9; color:var(--success); border-color:#c8e6c9; }
+.agency-card .pill.bad { background:#fdebe7; color:var(--danger); border-color:#f5c6c0; }
+.agency-card .pill.warn { background:#fff4e8; color:var(--warning); border-color:#ffd9b8; }
+.agency-card .agency-cta { position:absolute; top:14px; right:14px; background:#1abc9c; color:white; font-size:10px; font-weight:700; padding:3px 8px; border-radius:10px; text-transform:uppercase; letter-spacing:.5px; }
+.mkt-card { background:linear-gradient(135deg,#f3e6f9,#fff); border-left:4px solid var(--mkt); padding:14px 16px; border-radius:0 8px 8px 0; margin-bottom:12px; }
+.mkt-card h4 { margin:0 0 8px; color:var(--mkt); font-size:14px; }
+.mkt-card ul { margin:6px 0 0; padding-left:22px; font-size:13px; }
+.mkt-card ul li { margin-bottom:4px; }
+.mkt-card .agency-tag { display:inline-block; background:var(--mkt); color:white; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600; margin-right:6px; }
+.mkt-plan-card { background:#fff; border:1px solid var(--border); border-left:4px solid #d63384; border-radius:0 8px 8px 0; padding:16px; margin-bottom:14px; }
+.mkt-plan-card h4 { margin:0 0 10px; color:#d63384; font-size:15px; display:flex; align-items:center; gap:8px; }
+.mkt-plan-card .plan-meta { display:inline-block; background:#fce4ef; color:#d63384; font-size:11px; font-weight:600; padding:3px 10px; border-radius:12px; margin-right:8px; }
+.mkt-plan-card .plan-quote { background:#fff8fb; border-left:3px solid #d63384; padding:8px 12px; margin:10px 0; font-style:italic; color:#6e2148; font-size:13px; border-radius:0 6px 6px 0; }
+.mkt-plan-card ul { font-size:13px; margin:6px 0; padding-left:22px; }
+.mkt-plan-card ul li { margin-bottom:4px; }
+.mkt-grid-2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:10px; }
+.support-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin:10px 0; }
+.support-card { background:#fff; border:1px solid var(--border); border-radius:8px; padding:12px; text-align:center; }
+.support-card .agency { font-weight:700; color:var(--primary); font-size:13px; margin-bottom:6px; }
+.support-card .dates { font-size:12px; color:var(--text); }
+.support-card .dates span { display:block; padding:3px 0; }
 .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:100; align-items:center; justify-content:center; padding:20px; }
 .modal-overlay.open { display:flex; }
-.modal { background:white; border-radius:12px; max-width:700px; width:100%; max-height:90vh; overflow-y:auto; padding:24px; }
+.modal { background:white; border-radius:12px; max-width:820px; width:100%; max-height:90vh; overflow-y:auto; padding:24px; }
 .modal h3 { margin-top:0; color:var(--primary); }
 .modal .close { float:right; background:none; border:none; font-size:24px; cursor:pointer; color:var(--muted); }
-.modal .slide-list { list-style:none; padding:0; }
-.modal .slide-list li { padding:8px 12px; border-left:3px solid var(--accent); margin-bottom:6px; background:#f8f9fb; border-radius:0 6px 6px 0; font-size:13px; }
-.modal .slide-list .pos { font-weight:700; color:var(--primary); margin-right:8px; }
-.video-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; }
-.video-card { background:white; border:1px solid var(--border); border-radius:8px; padding:14px; }
-.video-card h4 { margin:0 0 6px; font-size:14px; color:var(--primary); }
-.video-card .meta { font-size:11px; color:var(--muted); margin-bottom:8px; }
-.video-card .badge { display:inline-block; background:var(--accent); color:white; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600; margin-right:6px; }
-.video-card iframe, .video-card video { width:100%; aspect-ratio:16/9; border:none; border-radius:6px; background:#000; }
-.video-card .placeholder { display:flex; align-items:center; justify-content:center; aspect-ratio:16/9; background:#1a1a1a; color:#888; border-radius:6px; font-size:13px; text-align:center; padding:20px; }
-.bar-bg { background:var(--border); height:8px; border-radius:4px; overflow:hidden; margin-top:4px; }
-.bar-fill { height:100%; transition:width .3s; }
-.bar-fill.ok { background:linear-gradient(90deg,var(--success),#2c8a36); }
-.bar-fill.partial { background:linear-gradient(90deg,var(--warning),#d35400); }
-.bar-fill.low { background:linear-gradient(90deg,var(--danger),#a02b1f); }
+.modal h4 { color:var(--primary); margin:14px 0 6px; font-size:14px; border-bottom:1px solid var(--border); padding-bottom:4px; }
+.modal .modal-section { margin-bottom:14px; }
+.modal .modal-section ul { margin:4px 0; padding-left:22px; font-size:13px; }
+.modal .modal-section ul li { margin-bottom:4px; }
+.modal .mkt-block { background:#f3e6f9; border-left:3px solid var(--mkt); padding:8px 12px; margin:8px 0; border-radius:0 6px 6px 0; font-size:13px; }
+.modal .mkt-block strong { color:var(--mkt); }
+.modal .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; margin:10px 0; }
+.modal .stats-grid .stat { background:#f0f6fb; border-radius:6px; padding:8px; text-align:center; }
+.modal .stats-grid .stat .v { font-size:18px; font-weight:700; color:var(--primary); }
+.modal .stats-grid .stat .l { font-size:10px; text-transform:uppercase; color:var(--muted); font-weight:600; }
 .callout { background:#f0f6fb; border-left:4px solid var(--accent); padding:12px 16px; border-radius:0 6px 6px 0; margin:12px 0; font-size:13px; }
 .callout strong { color:var(--primary); }
+.callout.mkt { background:#f3e6f9; border-left-color:var(--mkt); }
+.callout.mkt strong { color:var(--mkt); }
+.callout.warn { background:#fff8e6; border-left-color:#ffb800; }
 @media print {
   .toolbar, .modal-overlay { display:none !important; }
   details.section { box-shadow:none; border:1px solid #ccc; page-break-inside:avoid; }
@@ -96,7 +127,7 @@ table.data .bad { color:var(--danger); font-weight:700; }
 <body>
 <header>
   <h1>📋 Minuta de Reunión</h1>
-  <div class="sub">Hyundai Ecuador / Andinamotors · Cierre Mayo 2026 y Objetivos Junio</div>
+  <div class="sub">Hyundai Ecuador / Andinamotors · Cierre Mayo 2026 y Plan Junio</div>
 </header>
 <div class="toolbar">
   <button class="btn secondary" onclick="expandAll()">⬇ Expandir todo</button>
@@ -105,30 +136,29 @@ table.data .bad { color:var(--danger); font-weight:700; }
 </div>
 <main>
   <div class="meta-grid">
-    <div class="meta-card"><span class="lbl">Período</span><span class="val">Mayo 2026</span></div>
-    <div class="meta-card"><span class="lbl">Tipo</span><span class="val">Cierre Mensual + Objetivos Junio</span></div>
-    <div class="meta-card"><span class="lbl">Liderazgo</span><span class="val">Gerente Comercial</span></div>
+    <div class="meta-card"><span class="lbl">Período</span><span class="val">Mayo–Junio 2026</span></div>
+    <div class="meta-card"><span class="lbl">Tipo</span><span class="val">Cierre + Plan Comercial y MKT</span></div>
+    <div class="meta-card"><span class="lbl">Liderazgo</span><span class="val">Gerencia Comercial + MKT</span></div>
     <div class="meta-card"><span class="lbl">Empresa</span><span class="val">Andinamotors</span></div>
   </div>
 
   <details class="section info" open>
-    <summary>📚 Presentación Hyundai Nacional <span class="section-tag info">Diap. 1-100</span></summary>
+    <summary>📚 Presentación Hyundai Nacional</summary>
     <div class="section-body">
       <p style="margin-top:0;color:var(--muted);font-size:13px;">Resumen temático de la presentación de la mañana. Haz clic en una tarjeta para ver el detalle.</p>
       <div class="topic-grid">
-        <div class="topic-card" onclick="openTopic('cierre25')"><div class="range">Diap. 1-16</div><h4>🏁 Cierre 2025 Hyundai</h4><div class="desc">7.554 unidades · Market Share 6,1% · Tercer lugar</div></div>
-        <div class="topic-card" onclick="openTopic('mercado')"><div class="range">Diap. 17-33</div><h4>📈 Análisis de Mercado 2026</h4><div class="desc">Total, Livianos, Pasajeros y Comparable CYTD 2026</div></div>
-        <div class="topic-card" onclick="openTopic('funnel')"><div class="range">Diap. 34-40</div><h4>🎯 Embudos y Tráfico</h4><div class="desc">Funnel CYTD 2026 · Tráfico WI+SUP vs Ventas</div></div>
-        <div class="topic-card" onclick="openTopic('pilares')"><div class="range">Diap. 41-47</div><h4>🏛️ Pilares de Crecimiento</h4><div class="desc">Categorización · Seguimiento · Drive-H 2026</div></div>
-        <div class="topic-card" onclick="openTopic('objetivos25')"><div class="range">Diap. 48-49</div><h4>🎯 Objetivos Red</h4><div class="desc">Objetivos por concesionario</div></div>
-        <div class="topic-card" onclick="openTopic('credseg')"><div class="range">Diap. 50-54</div><h4>💳 Crédito y Seguros</h4><div class="desc">Caminos complementarios · Diversificación</div></div>
-        <div class="topic-card" onclick="openTopic('baekho')"><div class="range">Diap. 55-58</div><h4>🤖 BAEKHO IA</h4><div class="desc">Representante cognitivo de marca</div></div>
-        <div class="topic-card" onclick="openTopic('modelos')"><div class="range">Diap. 59-69</div><h4>🚗 Oportunidades por Modelo</h4><div class="desc">Grand i10 · Accent · Creta · Tucson · Staria</div></div>
-        <div class="topic-card" onclick="openTopic('mejorprac')"><div class="range">Diap. 70-76</div><h4>⭐ Mejores Prácticas</h4><div class="desc">Best practices a nivel concesionario</div></div>
-        <div class="topic-card" onclick="openTopic('marketing')"><div class="range">Diap. 77-91</div><h4>📣 Filosofía y Marketing</h4><div class="desc">"Innovamos para las personas" · Like Never Before</div></div>
-        <div class="topic-card" onclick="openTopic('campanas')"><div class="range">Diap. 92-99</div><h4>🎬 Campañas</h4><div class="desc">Híbridos · FIFA World Cup 2026™</div></div>
-        <div class="topic-card" onclick="openTopic('best')"><div class="range">Diap. 100</div><h4>🏆 Best Practice</h4><div class="desc">Caso de éxito de cierre</div></div>
-      </div>
+        <div class="topic-card" onclick="openTopic('cierre25')"><div class="range">Bloque 1</div><h4>🏁 Cierre 2025 Hyundai</h4><div class="desc">7.554 unidades · MS 6,1% · Tercer lugar</div></div>
+        <div class="topic-card" onclick="openTopic('mercado')"><div class="range">Bloque 2</div><h4>📈 Análisis de Mercado 2026</h4><div class="desc">Total, Livianos, Pasajeros y Comparable CYTD 2026</div></div>
+        <div class="topic-card" onclick="openTopic('funnel')"><div class="range">Bloque 3</div><h4>🎯 Embudos y Tráfico</h4><div class="desc">Funnel CYTD 2026 · Tráfico WI+SUP vs Ventas</div></div>
+        <div class="topic-card" onclick="openTopic('pilares')"><div class="range">Bloque 4</div><h4>🏛️ Pilares de Crecimiento</h4><div class="desc">Categorización · Seguimiento · Drive-H 2026</div></div>
+        <div class="topic-card" onclick="openTopic('objetivos25')"><div class="range">Bloque 5</div><h4>🎯 Objetivos Red</h4><div class="desc">Objetivos por concesionario</div></div>
+        <div class="topic-card" onclick="openTopic('credseg')"><div class="range">Bloque 6</div><h4>💳 Crédito y Seguros</h4><div class="desc">Caminos complementarios · Diversificación</div></div>
+        <div class="topic-card" onclick="openTopic('baekho')"><div class="range">Bloque 7</div><h4>🤖 BAEKHO IA</h4><div class="desc">Representante cognitivo de marca</div></div>
+        <div class="topic-card" onclick="openTopic('modelos')"><div class="range">Bloque 8</div><h4>🚗 Oportunidades por Modelo</h4><div class="desc">Grand i10 · Accent · Creta · Tucson · Staria</div></div>
+        <div class="topic-card" onclick="openTopic('mejorprac')"><div class="range">Bloque 9</div><h4>⭐ Mejores Prácticas</h4><div class="desc">Best practices a nivel concesionario</div></div>
+        <div class="topic-card" onclick="openTopic('marketing')"><div class="range">Bloque 10</div><h4>📣 Filosofía y Marketing</h4><div class="desc">"Innovamos para las personas"</div></div>
+        <div class="topic-card" onclick="openTopic('campanas')"><div class="range">Bloque 11</div><h4>🎬 Campañas</h4><div class="desc">Híbridos · FIFA World Cup 2026™</div></div>
+        <div class="topic-card" onclick="openTopic('best')"><div class="range">Bloque 12</div><h4>🏆 Best Practice</h4><div class="desc">Caso de éxito de cierre</div></div>
       </div>
     </div>
   </details>
@@ -142,7 +172,6 @@ table.data .bad { color:var(--danger); font-weight:700; }
         <button class="tab" onclick="switchTab(this,'rev-credito')">💳 Crédito</button>
         <button class="tab" onclick="switchTab(this,'rev-seguros')">🛡️ Seguros</button>
       </div>
-
       <div class="tab-panel active" id="rev-andina">
         <span class="field-label">🏢 Cierre Andinamotors · Mayo 2026</span>
         <div class="kpi-grid">
@@ -151,22 +180,21 @@ table.data .bad { color:var(--danger); font-weight:700; }
           <div class="kpi-card" style="background:linear-gradient(135deg,var(--accent),#008fb3);"><div class="label">Cumplimiento</div><div class="value">104%</div><div class="sub">sobre objetivo</div></div>
         </div>
         <table class="data">
-          <thead><tr><th>Concesionario / Agencia</th><th class="num">Objetivo</th><th class="num">Facturas</th><th class="num">Cumpl.</th><th class="num">Δ</th></tr></thead>
+          <thead><tr><th>Agencia</th><th class="num">Objetivo</th><th class="num">Facturas</th><th class="num">Cumpl.</th><th class="num">Δ</th></tr></thead>
           <tbody>
-            <tr><td><strong>Andinamotors Ambato</strong></td><td class="num">52</td><td class="num">53</td><td class="num ok">102%</td><td class="num ok">+1</td></tr>
-            <tr><td><strong>Andinamotors Chimborazo</strong></td><td class="num">23</td><td class="num">27</td><td class="num ok">117%</td><td class="num ok">+4</td></tr>
-            <tr><td><strong>Andinamotors Ingahurco</strong></td><td class="num">22</td><td class="num">18</td><td class="num bad">82%</td><td class="num bad">−4</td></tr>
-            <tr><td><strong>Andinamotors Cotopaxi</strong></td><td class="num">18</td><td class="num">22</td><td class="num ok">122%</td><td class="num ok">+4</td></tr>
+            <tr><td><strong>Agencia Matriz</strong></td><td class="num">52</td><td class="num">53</td><td class="num ok">102%</td><td class="num ok">+1</td></tr>
+            <tr><td><strong>Agencia Riobamba</strong></td><td class="num">23</td><td class="num">27</td><td class="num ok">117%</td><td class="num ok">+4</td></tr>
+            <tr><td><strong>Agencia Ingahurco</strong></td><td class="num">22</td><td class="num">18</td><td class="num bad">82%</td><td class="num bad">−4</td></tr>
+            <tr><td><strong>Agencia Latacunga</strong></td><td class="num">18</td><td class="num">22</td><td class="num ok">122%</td><td class="num ok">+4</td></tr>
             <tr class="total"><td>TOTAL GENERAL</td><td class="num">115</td><td class="num">120</td><td class="num">104%</td><td class="num">+5</td></tr>
           </tbody>
         </table>
-        <div class="callout"><strong>Hallazgo:</strong> Andinamotors sobrecumple el objetivo en +5 unidades. <strong>Chimborazo (117%)</strong> y <strong>Cotopaxi (122%)</strong> son las agencias más fuertes. <strong>Ingahurco (82%)</strong> queda rezagada y requiere plan de recuperación.</div>
+        <div class="callout"><strong>Hallazgo:</strong> Andinamotors sobrecumple el objetivo en +5 unidades. <strong>Agencia Latacunga (122%)</strong> y <strong>Agencia Riobamba (117%)</strong> son las más fuertes. <strong>Agencia Ingahurco (82%)</strong> queda rezagada.</div>
       </div>
-
       <div class="tab-panel" id="rev-modelos">
         <span class="field-label">🚗 Ventas Mayo por Modelo vs Objetivo</span>
         <div class="kpi-grid">
-          <div class="kpi-card"><div class="label">Real</div><div class="value">120</div><div class="sub">unidades vendidas</div></div>
+          <div class="kpi-card"><div class="label">Real</div><div class="value">120</div><div class="sub">unidades</div></div>
           <div class="kpi-card" style="background:linear-gradient(135deg,var(--accent-2),#d35400);"><div class="label">Objetivo</div><div class="value">115</div><div class="sub">unidades</div></div>
           <div class="kpi-card" style="background:linear-gradient(135deg,var(--success),#2c8a36);"><div class="label">Cumplimiento</div><div class="value">104%</div><div class="sub">+5 unidades</div></div>
         </div>
@@ -189,26 +217,24 @@ table.data .bad { color:var(--danger); font-weight:700; }
             <tr class="total"><td>TOTAL</td><td class="num">120</td><td class="num">115</td><td class="num">104%</td><td></td></tr>
           </tbody>
         </table>
-        <div class="callout"><strong>Top performers:</strong> I10 HB GLS (154%), Accent L 25 (164%), Tucson HEV (200%). <strong>Foco urgente:</strong> Creta FL (-11), Santa Fe HGS (-3), Tucson TA HLS y GLR (rezago en gama alta TA).</div>
+        <div class="callout"><strong>Top performers:</strong> I10 HB GLS (154%), Accent L 25 (164%), Tucson HEV (200%). <strong>Foco urgente:</strong> Creta FL (-11), Santa Fe HGS (-3), Tucson TA HLS y GLR.</div>
       </div>
-
       <div class="tab-panel" id="rev-credito">
-        <span class="field-label">💳 Ventas a Crédito por Agencia · Mayo 2026 (KPI 100% / 40% / 50%)</span>
+        <span class="field-label">💳 Ventas a Crédito por Agencia · Mayo 2026</span>
         <table class="data">
           <thead>
-            <tr><th>Agencia</th><th class="num">Meta</th><th class="num">N° Solicit.</th><th class="num">Real Aprob.</th><th class="num">KPI 40%</th><th class="num">Real Fact.</th><th class="num">KPI 50%</th><th class="num">Dif. KPI</th><th class="num">Aprob. vs Fact.</th></tr>
+            <tr><th>Agencia</th><th class="num">Meta</th><th class="num">Solicit.</th><th class="num">Aprob.</th><th class="num">KPI 40%</th><th class="num">Fact.</th><th class="num">KPI 50%</th><th class="num">Dif. KPI</th><th class="num">Aprob. vs Fact.</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>Matriz</strong></td><td class="num">10</td><td class="num">28</td><td class="num">13</td><td class="num">11</td><td class="num"><strong>6</strong></td><td class="num">6</td><td class="num">0</td><td class="num">7</td></tr>
-            <tr><td><strong>Ingahurco</strong></td><td class="num">4</td><td class="num">29</td><td class="num">16</td><td class="num">12</td><td class="num"><strong>3</strong></td><td class="num">6</td><td class="num bad">3</td><td class="num">13</td></tr>
-            <tr><td><strong>Latacunga</strong></td><td class="num">6</td><td class="num">31</td><td class="num">17</td><td class="num">12</td><td class="num"><strong>10</strong></td><td class="num">6</td><td class="num ok">−4</td><td class="num">7</td></tr>
-            <tr><td><strong>Riobamba</strong></td><td class="num">6</td><td class="num">13</td><td class="num">9</td><td class="num">5</td><td class="num"><strong>0</strong></td><td class="num">3</td><td class="num bad">3</td><td class="num">9</td></tr>
+            <tr><td><strong>Agencia Matriz</strong></td><td class="num">10</td><td class="num">28</td><td class="num">13</td><td class="num">11</td><td class="num"><strong>6</strong></td><td class="num">6</td><td class="num">0</td><td class="num">7</td></tr>
+            <tr><td><strong>Agencia Ingahurco</strong></td><td class="num">4</td><td class="num">29</td><td class="num">16</td><td class="num">12</td><td class="num"><strong>3</strong></td><td class="num">6</td><td class="num bad">3</td><td class="num">13</td></tr>
+            <tr><td><strong>Agencia Latacunga</strong></td><td class="num">6</td><td class="num">31</td><td class="num">17</td><td class="num">12</td><td class="num"><strong>10</strong></td><td class="num">6</td><td class="num ok">−4</td><td class="num">7</td></tr>
+            <tr><td><strong>Agencia Riobamba</strong></td><td class="num">6</td><td class="num">13</td><td class="num">9</td><td class="num">5</td><td class="num"><strong>0</strong></td><td class="num">3</td><td class="num bad">3</td><td class="num">9</td></tr>
             <tr class="total"><td>TOTAL</td><td class="num"></td><td class="num">101</td><td class="num">55</td><td class="num">40</td><td class="num" style="background:#ffb800;color:#000;"><strong>19</strong></td><td class="num">20</td><td class="num">1</td><td class="num" style="background:#c0392b;color:#fff;"><strong>36</strong></td></tr>
           </tbody>
         </table>
-        <div class="callout"><strong>Resumen:</strong> 101 solicitudes totales · 55 aprobaciones · solo <strong>19 facturas</strong> (KPI 50% = 20, déficit −1). <strong>Brecha aprobado-facturado: 36 unidades</strong> — son operaciones que llegaron a aprobación pero no se cerraron. <strong>Latacunga</strong> es la única que supera su KPI (+4). <strong>Riobamba</strong> no facturó ninguna a crédito en mayo.</div>
+        <div class="callout"><strong>Resumen:</strong> 101 solicitudes · 55 aprobaciones · solo <strong>19 facturas</strong>. <strong>Brecha aprobado–facturado: 36 unidades</strong>. <strong>Latacunga</strong> única que supera KPI (+4). <strong>Riobamba</strong> no facturó ninguna a crédito.</div>
       </div>
-
       <div class="tab-panel" id="rev-seguros">
         <span class="field-label">🛡️ Venta de Seguros · Mayo 2026</span>
         <div class="kpi-grid">
@@ -217,23 +243,328 @@ table.data .bad { color:var(--danger); font-weight:700; }
           <div class="kpi-card" style="background:linear-gradient(135deg,var(--success),#2c8a36);"><div class="label">Total Mayo</div><div class="value">16</div><div class="sub">seguros</div></div>
           <div class="kpi-card" style="background:linear-gradient(135deg,var(--accent),#008fb3);"><div class="label">Penetración</div><div class="value">13%</div><div class="sub">sobre 120 ventas</div></div>
         </div>
-        <div class="callout"><strong>Oportunidad:</strong> con 120 ventas facturadas y 16 seguros, la penetración es del 13%. F&amp;I debe priorizar el push de pólizas en operaciones a contado donde aún hay margen.</div>
+        <div class="callout"><strong>Oportunidad:</strong> 13% de penetración. F&amp;I debe priorizar el push de pólizas en operaciones a contado.</div>
+      </div>
+    </div>
+  </details>
+
+  <details class="section agencias" open>
+    <summary>🏢 Presentaciones por Agencia <span class="section-tag agencias">Detalle ampliado</span></summary>
+    <div class="section-body">
+      <p style="margin-top:0;color:var(--muted);font-size:13px;">Cada agencia presentó su cierre Mayo y acumulado Ene–May 2026. <strong>Haz clic en una tarjeta</strong> para ver el detalle ampliado.</p>
+      <div class="agency-grid">
+        <div class="agency-card" onclick="openAgency('ingahurco')">
+          <span class="agency-cta">Ver detalle ▸</span>
+          <div class="agency-name">🧭 Agencia Ingahurco</div>
+          <div class="agency-range">Andinamotors Agencia Norte · Av. Cevallos</div>
+          <div class="agency-metric"><span class="pill">Prom. 20,2 U/mes</span><span class="pill bad">Cumpl. May 82%</span><span class="pill warn">Crédito Fact. 3</span></div>
+        </div>
+        <div class="agency-card" onclick="openAgency('matriz')">
+          <span class="agency-cta">Ver detalle ▸</span>
+          <div class="agency-name">🏛️ Agencia Matriz</div>
+          <div class="agency-range">Ambato · Av. Atahualpa</div>
+          <div class="agency-metric"><span class="pill ok">257 U Ene–May</span><span class="pill ok">+41% vs 2025</span><span class="pill warn">Penetración Crédito 15%</span></div>
+        </div>
+        <div class="agency-card" onclick="openAgency('latacunga')">
+          <span class="agency-cta">Ver detalle ▸</span>
+          <div class="agency-name">🚙 Agencia Latacunga</div>
+          <div class="agency-range">Cotopaxi</div>
+          <div class="agency-metric"><span class="pill ok">Cumpl. May 122%</span><span class="pill ok">Único KPI Crédito +4</span><span class="pill">Cartera bajo control</span></div>
+        </div>
+        <div class="agency-card" onclick="openAgency('riobamba')">
+          <span class="agency-cta">Ver detalle ▸</span>
+          <div class="agency-name">🏔️ Agencia Riobamba</div>
+          <div class="agency-range">Chimborazo</div>
+          <div class="agency-metric"><span class="pill ok">Cumpl. May 117%</span><span class="pill">Cartera vencida controlada</span><span class="pill warn">Crédito Fact. 0</span></div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <details class="section mkt" open>
+    <summary>📣 Requerimientos de Marketing — por Agencia <span class="section-tag mkt">Pedidos agencias</span></summary>
+    <div class="section-body">
+      <div class="mkt-card">
+        <h4><span class="agency-tag">Agencia Ingahurco</span> Estrategias solicitadas</h4>
+        <ul>
+          <li>Lanzar más contenido de <strong>autos + camiones</strong>.</li>
+          <li><strong>Promocionar la ubicación</strong> de la agencia.</li>
+          <li>Activar <strong>campañas segmentadas</strong>.</li>
+          <li>Generación / medición de <strong>% de leads</strong>.</li>
+          <li><strong>Eventos + visitas a empresas</strong> (B2B / fidelización).</li>
+        </ul>
+      </div>
+      <div class="mkt-card">
+        <h4><span class="agency-tag">Agencia Matriz</span> Requerimientos</h4>
+        <ul>
+          <li><strong>Publicación de fotos de las entregas</strong> con etiquetado de clientes.</li>
+          <li><strong>Mayor participación y presencia en redes</strong> con videos.</li>
+          <li><strong>Eventos</strong>: Día del Niño, Día del Padre y Mundial FIFA 2026.</li>
+          <li>Apoyo en campaña / inversión <strong>Across $28.000</strong>.</li>
+        </ul>
+      </div>
+      <div class="mkt-card">
+        <h4><span class="agency-tag">Agencia Latacunga</span> Requerimientos</h4>
+        <ul>
+          <li><strong>Fidelización</strong> — plan estructurado de clientes recurrentes.</li>
+          <li><strong>Marketing Digital</strong> — refuerzo de presencia online.</li>
+          <li>Alineación comercial con MKT.</li>
+        </ul>
+      </div>
+      <div class="mkt-card">
+        <h4><span class="agency-tag">Agencia Riobamba</span> Requerimientos</h4>
+        <ul>
+          <li><em>La agencia no formalizó un listado específico de requerimientos MKT.</em></li>
+          <li><strong>Acción sugerida:</strong> solicitar lista de requerimientos para Junio.</li>
+        </ul>
+      </div>
+      <div class="callout mkt"><strong>Síntesis para Marketing:</strong> las agencias coinciden en pedir <strong>más presencia digital y contenido</strong>. Matriz suma <strong>activación de eventos estacionales</strong>. Ingahurco enfatiza <strong>geolocalización + B2B</strong>. Latacunga prioriza <strong>fidelización</strong>. Riobamba aún no formalizó su pedido.</div>
+    </div>
+  </details>
+
+  <details class="section mktplan" open>
+    <summary>🎯 Plan Marketing Mayo–Junio 2026 <span class="section-tag mktplan">Propuesta MKT</span></summary>
+    <div class="section-body">
+      <div class="callout" style="background:#fce4ef;border-left-color:#d63384;"><strong>Objetivo general:</strong> incrementar <strong>tráfico y leads</strong> en los showrooms de <strong>Riobamba, Latacunga, Ambato – Matriz Av. Atahualpa</strong> e <strong>Ingahurco – Agencia Norte</strong>.</div>
+
+      <div class="mkt-plan-card">
+        <h4>📅 Agenda Junio — Drivers de tráfico</h4>
+        <ul>
+          <li>Día del Niño</li>
+          <li>Día del Padre</li>
+          <li>Mundial</li>
+          <li>Carrera 5K solidaria PUCE – Hogar Santa Marianita</li>
+          <li>Temporada familiar y vacaciones escolares (Santa Fe)</li>
+        </ul>
+        <p style="margin:10px 0 6px;font-size:13px;"><strong>La estrategia debe enfocarse en:</strong></p>
+        <ul>
+          <li>Llevar personas al showroom</li>
+          <li>Generar leads</li>
+          <li>Activaciones</li>
+          <li>Contenido emocional + entretenimiento</li>
+          <li>Base de datos y test drives</li>
+        </ul>
       </div>
 
+      <div class="mkt-plan-card">
+        <h4>🤝 Soporte en las Agencias — Calendario MKT en sitio</h4>
+        <div class="support-grid">
+          <div class="support-card"><div class="agency">AMBATO</div><div class="dates"><span>Jueves 4</span><span>Jueves 18</span></div></div>
+          <div class="support-card"><div class="agency">RIOBAMBA</div><div class="dates"><span>Viernes 5</span><span>Viernes 19</span></div></div>
+          <div class="support-card"><div class="agency">LATACUNGA</div><div class="dates"><span>Miércoles 17</span><span>Viernes 29</span></div></div>
+        </div>
+      </div>
+
+      <div class="mkt-plan-card">
+        <h4>🌟 Plan de Cultura y Experiencia en Showroom</h4>
+        <p style="margin:4px 0;font-size:13px;"><strong>Objetivo:</strong> que cada cliente sienta una experiencia cálida, alegre y diferente desde que entra.</p>
+        <p style="margin:8px 0 4px;font-size:13px;"><strong>Bienvenida showroom — todo colaborador debe:</strong></p>
+        <ul>
+          <li>Saludar con energía</li>
+          <li>Sonreír</li>
+          <li>Ofrecer ayuda inmediata</li>
+          <li>Despedirse por nombre</li>
+        </ul>
+        <div class="plan-quote">"Bienvenido a Hyundai Andinamotors"</div>
+        <div class="plan-quote">"Gracias por visitarnos" · "Estamos felices de atenderle"</div>
+        <div class="plan-quote">"Permítanos ayudarle a encontrar su Hyundai ideal"</div>
+        <div class="plan-quote">"Recibimos personas, no solo clientes"</div>
+      </div>
+
+      <div class="mkt-grid-2">
+        <div class="mkt-plan-card">
+          <h4>👶 Día del Niño</h4>
+          <span class="plan-meta">Sábado 6 · 11:00–13:00 · todas las agencias</span>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Objetivo:</strong> atraer familias completas al showroom.</p>
+          <ul>
+            <li>Caritas pintadas</li>
+            <li>Canguil y algodón</li>
+            <li>Mini pista de carros</li>
+            <li>Concurso de dibujo</li>
+            <li>Fotos con personajes</li>
+            <li>Regalitos Hyundai Kids</li>
+          </ul>
+          <div class="plan-quote">"Mientras los niños juegan, papá y mamá conocen el vehículo ideal."</div>
+        </div>
+
+        <div class="mkt-plan-card">
+          <h4>⚽ Locos por el Mundial</h4>
+          <span class="plan-meta">Ambato, Ingahurco, Riobamba y Latacunga · todo el mes</span>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Objetivo:</strong> incrementar visitas a showroom, test drives y generación de leads.</p>
+          <ul>
+            <li>Test drive o reserva → <strong>camiseta mundialista GRATIS</strong> (50 camisetas a distribuir).</li>
+            <li>Zona de fotos, caritas mundialistas, premios, concursos y pronósticos.</li>
+            <li>Promoción válida hasta agotar stock; aplican condiciones.</li>
+          </ul>
+        </div>
+
+        <div class="mkt-plan-card">
+          <h4>👨‍🍳 Día del Padre — Grill &amp; Dad Hyundai</h4>
+          <span class="plan-meta">Sábado 20 · 11:00–13:00 · todas las agencias</span>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Concurso "Mi Mejor Ruta con Papá":</strong></p>
+          <ol style="font-size:13px;padding-left:22px;">
+            <li>Visitar el showroom.</li>
+            <li>Tomarse una fotografía en el evento.</li>
+            <li>Publicarla en redes sociales.</li>
+            <li>Etiquetar a Hyundai Andinamotors.</li>
+          </ol>
+          <p style="margin:6px 0 0;font-size:13px;">Sorteo especial entre las publicaciones.</p>
+        </div>
+
+        <div class="mkt-plan-card">
+          <h4>🏃 5K Hogar Santa Marianita PUCE</h4>
+          <span class="plan-meta">"Kilómetros que ayudan" · Agenda tu cita Hyundai</span>
+          <p style="margin:8px 0 4px;font-size:13px;">Quien deje sus datos participa por: <strong>Kit Hyundai · Gift card · Mantenimiento · Accesorios</strong>.</p>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Cada asesor tendrá meta de generar contactos durante el evento.</strong></p>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Datos a recopilar:</strong> nombre · teléfono · ciudad · vehículo de interés · ¿desea cotización? · ¿desea test drive?</p>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Activaciones:</strong> exhibición · Photobooth Hyundai · registro de visitantes.</p>
+        </div>
+
+        <div class="mkt-plan-card">
+          <h4>🌱 Día del Medio Ambiente</h4>
+          <span class="plan-meta">5 de junio</span>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Objetivo:</strong> posicionar el <strong>Hyundai Santa Fe Híbrido</strong>.</p>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Concepto:</strong> "El futuro se conduce hoy".</p>
+          <ul>
+            <li>Menor consumo de combustible.</li>
+            <li>Tecnología híbrida.</li>
+            <li>Menores emisiones.</li>
+            <li>Mayor eficiencia para la familia moderna.</li>
+            <li>Innovación y confort Hyundai.</li>
+          </ul>
+          <div class="plan-quote">"Prueba el futuro"</div>
+        </div>
+
+        <div class="mkt-plan-card">
+          <h4>🏆 Plan de Recompensas para Colaboradores</h4>
+          <span class="plan-meta">"Los que hacen grande a Andinamotors"</span>
+          <ul>
+            <li><strong>Mejor vendedor del mes</strong> → gift card.</li>
+            <li><strong>Mejor atención al cliente</strong> → basado en comentarios, actitud y trabajo en equipo.</li>
+            <li><strong>Agencia destacada</strong> (más tráfico, mejor atención, mayor cumplimiento) → desayuno corporativo, trofeo y reconocimiento institucional.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mkt-plan-card">
+        <h4>🎥 Nuevo Formato de Entrega de Vehículos</h4>
+        <p style="margin:6px 0;font-size:13px;"><strong>Objetivo:</strong> convertir cada entrega en <strong>contenido emocional y viral</strong>. Formato de plantilla unificado.</p>
+      </div>
+
+      <div class="mkt-plan-card">
+        <h4>📊 Resultados de Anuncios — últimos 30 días</h4>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:10px 0;">
+          <div style="background:#fce4ef;border-radius:6px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:#d63384;">103 mil</div><div style="font-size:10px;text-transform:uppercase;color:#6e2148;font-weight:600;">Interacciones</div></div>
+          <div style="background:#fce4ef;border-radius:6px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:#d63384;">35–54</div><div style="font-size:10px;text-transform:uppercase;color:#6e2148;font-weight:600;">Edad principal</div></div>
+          <div style="background:#fce4ef;border-radius:6px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:#d63384;">45%</div><div style="font-size:10px;text-transform:uppercase;color:#6e2148;font-weight:600;">Chimborazo</div></div>
+          <div style="background:#fce4ef;border-radius:6px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:#d63384;">33,4%</div><div style="font-size:10px;text-transform:uppercase;color:#6e2148;font-weight:600;">Tungurahua</div></div>
+          <div style="background:#fce4ef;border-radius:6px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:#d63384;">13,2%</div><div style="font-size:10px;text-transform:uppercase;color:#6e2148;font-weight:600;">Cotopaxi</div></div>
+        </div>
+        <p style="margin:8px 0;font-size:13px;">Mayor participación masculina · mayoría desde dispositivos móviles · principalmente Feed y búsquedas de Facebook.</p>
+        <p style="margin:8px 0 4px;font-size:13px;"><strong>Recomendaciones:</strong></p>
+        <ul>
+          <li>Mantener campañas dirigidas al segmento <strong>35–54 años</strong>.</li>
+          <li>Incrementar <strong>Reels y videos cortos</strong>.</li>
+          <li>Fortalecer <strong>remarketing en Chimborazo, Tungurahua y Cotopaxi</strong> (más del 90% de la interacción).</li>
+          <li>Diseñar contenido específico para <strong>renovación y recompra</strong>.</li>
+        </ul>
+      </div>
+
+      <div class="mkt-grid-2">
+        <div class="mkt-plan-card">
+          <h4>🔁 Fidelización Postventa</h4>
+          <span class="plan-meta">"Te Extrañamos en Hyundai" · "Volver Tiene Beneficios"</span>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Objetivo:</strong> contactar clientes que no han regresado al taller en 6, 12 o más meses.</p>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Segmentación BD:</strong> 6 meses · 12 meses · más de 12 meses.</p>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Llamada o WhatsApp personalizado.</strong></p>
+          <div class="plan-quote">"No es una campaña de venta, es una llamada de atención al cliente."</div>
+          <p style="margin:8px 0 4px;font-size:13px;"><strong>Al regresar al taller reciben:</strong></p>
+          <ul>
+            <li>Diagnóstico gratuito</li>
+            <li>Lavado de cortesía</li>
+            <li>Descuento en mano de obra</li>
+            <li>Descuento en repuestos seleccionados</li>
+            <li>Revisión multipunto sin costo</li>
+          </ul>
+        </div>
+
+        <div class="mkt-plan-card">
+          <h4>🎖️ Club de Beneficios</h4>
+          <ul>
+            <li>Recordatorios de mantenimiento.</li>
+            <li>Promociones exclusivas.</li>
+            <li>Eventos VIP.</li>
+            <li>Prioridad en citas.</li>
+            <li>Beneficios por referidos.</li>
+            <li>Promociones para renovación de vehículo.</li>
+          </ul>
+        </div>
+
+        <div class="mkt-plan-card">
+          <h4>👥 Referidos — "Recomienda y Gana"</h4>
+          <p style="margin:8px 0 4px;font-size:13px;">Si un cliente refiere a un familiar o amigo para mantenimiento, recibe:</p>
+          <ul>
+            <li>Lavado premium.</li>
+            <li>Alineación.</li>
+            <li>Balanceo.</li>
+            <li>Accesorio Hyundai.</li>
+            <li>Descuento en su próximo servicio.</li>
+          </ul>
+        </div>
+
+        <div class="mkt-plan-card">
+          <h4>🎁 "Mes del Cliente Hyundai" — Junio</h4>
+          <p style="margin:8px 0 4px;font-size:13px;">Por cada ingreso al taller durante junio recibe un cupón para participar por:</p>
+          <ul>
+            <li>Mantenimiento gratuito.</li>
+            <li>Cambio de aceite.</li>
+            <li>Kit Hyundai.</li>
+            <li>Gift card de combustible.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mkt-plan-card">
+        <h4>📈 Resultados Campañas Digitales — Mayo</h4>
+        <span class="plan-meta">Total invertido: $680,61 · +42% interacción Tucson</span>
+        <table class="data" style="margin-top:10px;">
+          <thead><tr><th>Campaña / Agencia</th><th class="num">Visualizaciones</th><th class="num">Conversaciones</th><th class="num">Costo/Conv.</th><th class="num">Duración</th><th class="num">Costo Total</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Video Ubicación Ingahurco</strong></td><td class="num">10.872</td><td class="num">27</td><td class="num">$1,07</td><td class="num">15 días</td><td class="num">$26,72</td></tr>
+            <tr><td><strong>Vacante Riobamba</strong></td><td class="num">48.895</td><td class="num">1.363</td><td class="num">$0,02</td><td class="num">6 días</td><td class="num">$29,98</td></tr>
+            <tr><td>¿Tu vehículo tarda en encender?</td><td class="num">15.498</td><td class="num">21</td><td class="num">$2,13</td><td class="num">9 días</td><td class="num">$44,68</td></tr>
+            <tr><td><strong>Descubre el poder del nuevo Tucson</strong></td><td class="num">77.077</td><td class="num">21.914</td><td class="num">$0,00</td><td class="num">9 días</td><td class="num">$44,94</td></tr>
+            <tr><td>Grand i10 (campaña A)</td><td class="num">47.312</td><td class="num">151</td><td class="num">$1,16</td><td class="num">11 días</td><td class="num">$175,21</td></tr>
+            <tr><td>Hyundai, seguridad para tu familia</td><td class="num">24.856</td><td class="num">67</td><td class="num">$1,19</td><td class="num">12 días</td><td class="num">$79,97</td></tr>
+            <tr><td>¿Vas a viajar este feriado?</td><td class="num">33.229</td><td class="num">33</td><td class="num">$2,42</td><td class="num">15 días</td><td class="num">$79,99</td></tr>
+            <tr><td>Hyundai Tucson</td><td class="num">13.167</td><td class="num">33</td><td class="num">$1,21</td><td class="num">15 días</td><td class="num">$39,99</td></tr>
+            <tr><td>Grand i10 (campaña B)</td><td class="num">19.524</td><td class="num">107</td><td class="num">$0,46</td><td class="num">11 días</td><td class="num">$49,38</td></tr>
+            <tr><td>Diners Club</td><td class="num">17.934</td><td class="num">5</td><td class="num">$9,57</td><td class="num">16 días</td><td class="num">$47,86</td></tr>
+            <tr><td><strong>SOMOS EL #1</strong></td><td class="num">7.614</td><td class="num">3.452</td><td class="num">$0,00</td><td class="num">4 días</td><td class="num">$16,95</td></tr>
+            <tr class="total"><td>TOTAL</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num">$680,61</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn"><strong>Hallazgos:</strong> virales más eficientes: <strong>"Descubre el Tucson" (77K viz, 21.9K conv.)</strong>, <strong>"Vacante Riobamba" (48.9K viz, 1.363 conv.)</strong> y <strong>"SOMOS EL #1" (7.6K viz, 3.452 conv.)</strong>. Menos eficientes: <strong>Diners Club ($9,57/conv.)</strong> y <strong>"¿Vas a viajar este feriado?" ($2,42/conv.)</strong>. <strong>+42% interacción adicional en línea Tucson.</strong></div>
+      </div>
+
+      <div class="mkt-plan-card">
+        <h4>🥊 Competencia monitoreada</h4>
+        <p style="margin:6px 0;font-size:13px;">Marca destacada en seguimiento: <strong>CHERY</strong>.</p>
+      </div>
     </div>
   </details>
 
   <details class="section tarde" open>
-    <summary>🎯 Objetivos Junio 2026 — Por Agencia <span class="section-tag tarde">Tarde</span></summary>
+    <summary>🎯 Objetivos Junio 2026 — Por Agencia <span class="section-tag tarde">Comercial</span></summary>
     <div class="section-body">
       <div class="kpi-grid">
-        <div class="kpi-card"><div class="label">Matriz</div><div class="value">56</div><div class="sub">unidades</div></div>
-        <div class="kpi-card"><div class="label">Ingahurco</div><div class="value">22</div><div class="sub">unidades</div></div>
-        <div class="kpi-card"><div class="label">Riobamba</div><div class="value">30</div><div class="sub">unidades</div></div>
-        <div class="kpi-card"><div class="label">Latacunga</div><div class="value">22</div><div class="sub">unidades</div></div>
+        <div class="kpi-card"><div class="label">Agencia Matriz</div><div class="value">56</div><div class="sub">unidades</div></div>
+        <div class="kpi-card"><div class="label">Agencia Ingahurco</div><div class="value">22</div><div class="sub">unidades</div></div>
+        <div class="kpi-card"><div class="label">Agencia Riobamba</div><div class="value">30</div><div class="sub">unidades</div></div>
+        <div class="kpi-card"><div class="label">Agencia Latacunga</div><div class="value">22</div><div class="sub">unidades</div></div>
         <div class="kpi-card" style="background:linear-gradient(135deg,var(--success),#2c8a36);"><div class="label">TOTAL</div><div class="value">130</div><div class="sub">unidades junio</div></div>
       </div>
-      <div class="callout"><strong>Objetivo Junio:</strong> 130 unidades, +15 unidades sobre el objetivo de mayo (115) y +10 sobre el cierre real de mayo (120). Mayor peso en Matriz (43%) y Riobamba (23%).</div>
+      <div class="callout"><strong>Objetivo Junio:</strong> 130 unidades, +15 sobre objetivo mayo (115) y +10 sobre cierre real (120). Mayor peso en Matriz (43%) y Riobamba (23%).</div>
     </div>
   </details>
 
@@ -246,28 +577,277 @@ table.data .bad { color:var(--danger); font-weight:700; }
   </div>
 </div>
 
+<div class="modal-overlay" id="agency-modal" onclick="closeAgencyIfBackdrop(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="close" onclick="closeAgency()">×</button>
+    <div id="agency-content"></div>
+  </div>
+</div>
+
 <script>
 const TOPICOS = {
-  cierre25: { title:"🏁 Cierre 2025 Hyundai", range:"Diap. 1-16", content:"<p><strong>Resultado 2025:</strong> 7.554 unidades · Market Share 6,1% · <strong>Tercer lugar</strong> del mercado.</p><p>Mensaje clave: 'Cerramos el 2025 en el tercer lugar con un gran trabajo en equipo.'</p><ul class='slide-list'><li><span class='pos'>D4</span>Ventas 7.554 · MS 6,1%</li><li><span class='pos'>D5</span>Volver a las bases: clientes</li><li><span class='pos'>D10-12</span>Posicionamiento 2024 vs 2025</li><li><span class='pos'>D13-14</span>Mercado comparable -4,47% del Top 2</li><li><span class='pos'>D15</span>Hyundai sólido Top 3</li></ul>" },
-  mercado: { title:"📈 Análisis de Mercado 2026", range:"Diap. 17-33", content:"<p>Cierre cuatrimestre enero-abril 2026.</p><ul class='slide-list'><li><span class='pos'>D18</span>Ventas Totales 2017 — Forecast 2026</li><li><span class='pos'>D19-23</span>Mercado Total CYTD 2026 (TIV)</li><li><span class='pos'>D24-25</span>Mercado Livianos CYTD 2026</li><li><span class='pos'>D26-29</span>Mercado Pasajeros CYTD 2026</li><li><span class='pos'>D30-33</span>Mercado Comparable CYTD 2026</li></ul>" },
-  funnel: { title:"🎯 Embudos y Tráfico", range:"Diap. 34-40", content:"<ul class='slide-list'><li><span class='pos'>D34</span>Ventas — Resultados</li><li><span class='pos'>D36</span>Funnel Hyundai CYTD 2026</li><li><span class='pos'>D37</span>Tráfico (WI+SUP) vs Ventas 2025 vs 2026</li><li><span class='pos'>D38-39</span>El Siguiente Nivel</li><li><span class='pos'>D40</span>Categorizar mejor</li></ul>" },
-  pilares: { title:"🏛️ Pilares de Crecimiento", range:"Diap. 41-47", content:"<ul class='slide-list'><li><span class='pos'>D41</span>Pilares del Crecimiento</li><li><span class='pos'>D42-43</span><strong>Pilar 01 · Categorización</strong></li><li><span class='pos'>D44</span><strong>Pilar 02 · Seguimiento</strong></li><li><span class='pos'>D45-46</span>Drive-H · 2026 + Ventajas</li><li><span class='pos'>D47</span>'Lo que medimos lo mejoramos'</li></ul>" },
-  objetivos25: { title:"🎯 Objetivos Ventas (Red)", range:"Diap. 48-49", content:"<ul class='slide-list'><li><span class='pos'>D48</span>Objetivos de Ventas global</li><li><span class='pos'>D49</span>Objetivos por Concesionario</li></ul>" },
-  credseg: { title:"💳 Crédito y Seguros — Visión", range:"Diap. 50-54", content:"<p><strong>Premisa:</strong> 'Contado y crédito son caminos complementarios hacia una red más fuerte.'</p><ul class='slide-list'><li><span class='pos'>D50</span>Contado + Crédito</li><li><span class='pos'>D51</span>Más allá del vehículo</li><li><span class='pos'>D52</span>Diversificación de ingresos</li><li><span class='pos'>D53</span>Acceso sin descapitalizar patrimonio</li></ul>" },
-  baekho: { title:"🤖 BAEKHO — IA de Marca", range:"Diap. 55-58", content:"<p><strong>BAEKHO</strong> es un representante cognitivo de marca que responde, interpreta y clasifica interacciones con clientes.</p><h4>¿Qué soluciona?</h4><ul><li>Demoras en respuestas</li><li>Pérdida de oportunidades comerciales</li></ul>" },
-  modelos: { title:"🚗 Oportunidades por Modelo", range:"Diap. 59-69", content:"<ul class='slide-list'><li><span class='pos'>D60-61</span>Grand i10 HB</li><li><span class='pos'>D62-63</span>Accent</li><li><span class='pos'>D64-65</span>Creta</li><li><span class='pos'>D66-67</span>Tucson</li><li><span class='pos'>D68-69</span>Staria</li></ul>" },
-  mejorprac: { title:"⭐ Mejores Prácticas", range:"Diap. 70-76", content:"<p>Casos de éxito y best practices a nivel concesionario y showroom.</p>" },
-  marketing: { title:"📣 Filosofía y Marketing", range:"Diap. 77-91", content:"<p><strong>'Innovamos para las personas'</strong>. El progreso transforma la vida.</p><h4>Pilares globales:</h4><ul><li>Innovación</li><li>Cercanía / Humanidad</li><li>Movilidad consciente</li></ul><p>Plataforma: <strong>'Hyundai Like Never Before'</strong></p>" },
-  campanas: { title:"🎬 Campañas Activas", range:"Diap. 92-99", content:"<ul class='slide-list'><li><span class='pos'>D92</span>Video Marca Octubre 30s</li><li><span class='pos'>D94-96</span>Campaña Híbridos (Cuenca 56s)</li><li><span class='pos'>D97-98</span>FIFA World Cup 2026™ · Hyundai Marzo Mundial</li></ul>" },
-  best: { title:"🏆 Best Practice Concesionario", range:"Diap. 100", content:"<p>Caso de éxito de cierre — inspiración para la red.</p>" }
+  cierre25: { title:"🏁 Cierre 2025 Hyundai", content:"<p><strong>Resultado 2025:</strong> 7.554 unidades · MS 6,1% · <strong>Tercer lugar</strong>.</p><ul><li>Ventas 7.554 · MS 6,1%</li><li>Volver a las bases: clientes</li><li>Posicionamiento 2024 vs 2025</li><li>Mercado comparable -4,47% del Top 2</li><li>Hyundai sólido Top 3</li></ul>" },
+  mercado: { title:"📈 Análisis de Mercado 2026", content:"<p>Cierre cuatrimestre enero-abril 2026.</p><ul><li>Ventas Totales — Forecast 2026</li><li>Mercado Total CYTD 2026 (TIV)</li><li>Mercado Livianos CYTD 2026</li><li>Mercado Pasajeros CYTD 2026</li><li>Mercado Comparable CYTD 2026</li></ul>" },
+  funnel: { title:"🎯 Embudos y Tráfico", content:"<ul><li>Ventas — Resultados</li><li>Funnel Hyundai CYTD 2026</li><li>Tráfico (WI+SUP) vs Ventas 2025 vs 2026</li><li>El Siguiente Nivel</li><li>Categorizar mejor</li></ul>" },
+  pilares: { title:"🏛️ Pilares de Crecimiento", content:"<ul><li>Pilares del Crecimiento</li><li><strong>Pilar 01 · Categorización</strong></li><li><strong>Pilar 02 · Seguimiento</strong></li><li>Drive-H · 2026</li><li>Lo que medimos lo mejoramos</li></ul>" },
+  objetivos25: { title:"🎯 Objetivos Ventas (Red)", content:"<ul><li>Objetivos de Ventas global</li><li>Objetivos por Concesionario</li></ul>" },
+  credseg: { title:"💳 Crédito y Seguros — Visión", content:"<p>Contado y crédito son caminos complementarios hacia una red más fuerte.</p><ul><li>Contado + Crédito</li><li>Más allá del vehículo</li><li>Diversificación de ingresos</li><li>Acceso sin descapitalizar patrimonio</li></ul>" },
+  baekho: { title:"🤖 BAEKHO — IA de Marca", content:"<p><strong>BAEKHO</strong> es un representante cognitivo de marca que responde, interpreta y clasifica interacciones con clientes.</p><h4>¿Qué soluciona?</h4><ul><li>Demoras en respuestas</li><li>Pérdida de oportunidades comerciales</li></ul>" },
+  modelos: { title:"🚗 Oportunidades por Modelo", content:"<ul><li>Grand i10 HB</li><li>Accent</li><li>Creta</li><li>Tucson</li><li>Staria</li></ul>" },
+  mejorprac: { title:"⭐ Mejores Prácticas", content:"<p>Casos de éxito y best practices a nivel concesionario y showroom.</p>" },
+  marketing: { title:"📣 Filosofía y Marketing", content:"<p><strong>Innovamos para las personas.</strong></p><h4>Pilares globales:</h4><ul><li>Innovación</li><li>Cercanía / Humanidad</li><li>Movilidad consciente</li></ul><p>Plataforma: <strong>Hyundai Like Never Before</strong></p>" },
+  campanas: { title:"🎬 Campañas Activas", content:"<ul><li>Video Marca Octubre 30s</li><li>Campaña Híbridos (Cuenca 56s)</li><li>FIFA World Cup 2026™</li></ul>" },
+  best: { title:"🏆 Best Practice Concesionario", content:"<p>Caso de éxito de cierre — inspiración para la red.</p>" }
 };
+
+const AGENCIAS = {
+  ingahurco: {
+    title: "🧭 Agencia Ingahurco — Detalle Presentación",
+    range: "Andinamotors Agencia Norte · Av. Cevallos",
+    content: `
+      <div class="modal-section">
+        <h4>📋 Qué presentó la agencia</h4>
+        <ul>
+          <li><strong>Portada Andinamotors Agencia Norte</strong>.</li>
+          <li><strong>Comparativo 2025 vs 2026</strong> de ventas totales y por canales.</li>
+          <li><strong>Ventas totales 2026</strong> mes a mes, promedio mensual <strong>20,2 unidades</strong>.</li>
+          <li>Resultados desglosados por <strong>canales de venta</strong>.</li>
+          <li><strong>Variación y evolución</strong> de clientes y ventas.</li>
+          <li><strong>App Hyundai</strong>.</li>
+          <li><strong>KPI's 2026</strong>.</li>
+          <li><strong>Competencia plaza Av. Cevallos</strong>.</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h4>⭐ Puntos a resaltar</h4>
+        <div class="stats-grid">
+          <div class="stat"><div class="v">82%</div><div class="l">Cumpl. Mayo</div></div>
+          <div class="stat"><div class="v">18 / 22</div><div class="l">Real / Obj</div></div>
+          <div class="stat"><div class="v">20,2</div><div class="l">Prom U / mes</div></div>
+          <div class="stat"><div class="v">22</div><div class="l">Obj. Junio</div></div>
+        </div>
+        <ul>
+          <li>Comparativo 2025 vs 2026 muestra <strong>mejora sostenida</strong>, aunque mayo cerró bajo el objetivo (82%).</li>
+          <li>Agencia <strong>más rezagada de la red</strong> en cumplimiento mensual — requiere plan de recuperación.</li>
+          <li><strong>Crédito Mayo:</strong> 29 solicitudes · 16 aprobaciones · solo <strong>3 facturas</strong>.</li>
+          <li><strong>Brecha aprobado vs facturado: 13 unidades</strong> — la más alta de la red.</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h4>🥊 Competencia en Av. Cevallos</h4>
+        <table class="data" style="margin:6px 0;">
+          <thead><tr><th>Marca</th><th class="num">Ventas Mayo</th><th>Notas</th></tr></thead>
+          <tbody>
+            <tr><td>Chevrolet</td><td class="num">19</td><td>—</td></tr>
+            <tr><td>MG</td><td class="num">5</td><td>—</td></tr>
+            <tr><td>Ayasa</td><td class="num">16</td><td>2 nuevos · 14 retoma</td></tr>
+            <tr><td><strong>Ambacar</strong></td><td class="num"><strong>42</strong></td><td>27 contado · 15 crédito (líder)</td></tr>
+            <tr><td>Volkswagen</td><td class="num">11</td><td>—</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;margin:6px 0;"><strong>Lectura:</strong> Ambacar lidera la avenida con 42 U. Ingahurco está vendiendo menos que tres de las cinco marcas competidoras del corredor.</p>
+      </div>
+      <div class="mkt-block">
+        <strong>📣 Requerimientos de Marketing:</strong> contenido autos + camiones · promocionar ubicación · campañas segmentadas · % de leads · eventos + visitas a empresas.
+      </div>`
+  },
+  matriz: {
+    title: "🏛️ Agencia Matriz — Detalle Presentación",
+    range: "Ambato · Av. Atahualpa",
+    content: `
+      <div class="modal-section">
+        <h4>📋 Qué presentó la agencia</h4>
+        <ul>
+          <li><strong>Informe de Resultados Enero–Mayo 2026 — Agencia Matriz</strong>.</li>
+          <li>Cierre <strong>mes a mes</strong> (Ene–May) con desglose por canales.</li>
+          <li><strong>Acumulado del primer quimestre 2026</strong>, total y por canales.</li>
+          <li>Resultados <strong>mensual y acumulado por asesor</strong>.</li>
+          <li><strong>Comparativo vs Business Plan 2026</strong>.</li>
+          <li><strong>Comparativo Ene–May 2025 vs 2026</strong>: +41%.</li>
+          <li><strong>Ventas por modelo</strong>.</li>
+          <li><strong>Rebates</strong>.</li>
+          <li><strong>Venta del resto de marcas</strong>.</li>
+          <li><strong>Vehículos facturados no entregados</strong>.</li>
+          <li><strong>Colocación de créditos y seguros</strong>.</li>
+          <li><strong>KPIs, Cartera, 7 Pilares y Resumen Ejecutivo</strong>.</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h4>⭐ Puntos a resaltar</h4>
+        <div class="stats-grid">
+          <div class="stat"><div class="v">102%</div><div class="l">Cumpl. Mayo</div></div>
+          <div class="stat"><div class="v">53 / 52</div><div class="l">Real / Obj</div></div>
+          <div class="stat"><div class="v">257 U</div><div class="l">Ene–May 2026</div></div>
+          <div class="stat"><div class="v">+41%</div><div class="l">vs 2025</div></div>
+          <div class="stat"><div class="v">56</div><div class="l">Obj. Junio</div></div>
+        </div>
+        <ul>
+          <li><strong>+105 unidades absolutas</strong> sobre Ene–May 2025 (257 vs 152). Sobre BP 2026.</li>
+          <li>Agencia con mayor objetivo Junio (<strong>56 U = 43% del total red</strong>).</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h4>🚗 Mix de modelos Ene–May</h4>
+        <table class="data" style="margin:6px 0;">
+          <thead><tr><th>Modelo</th><th class="num">U Ene–May</th><th class="num">% Mix</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Tucson</strong></td><td class="num">89</td><td class="num">35%</td></tr>
+            <tr><td>Creta</td><td class="num">49</td><td class="num">19%</td></tr>
+            <tr><td>Accent</td><td class="num">48</td><td class="num">19%</td></tr>
+            <tr><td>Grand i10 HB</td><td class="num">43</td><td class="num">17%</td></tr>
+            <tr class="total"><td>Subtotal Top 4</td><td class="num">229</td><td class="num">89%</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;margin:6px 0;"><strong>9 de cada 10 ventas</strong> de Matriz vienen de estos 4 modelos.</p>
+      </div>
+      <div class="modal-section">
+        <h4>👥 Desempeño asesores</h4>
+        <table class="data" style="margin:6px 0;">
+          <thead><tr><th>Asesor</th><th class="num">U Acum.</th><th class="num">Cumpl.</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Mario López</strong></td><td class="num">69</td><td class="num ok">138%</td></tr>
+            <tr><td>Christian Jijón</td><td class="num">46</td><td class="num warn">92%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-section">
+        <h4>💳 Crédito · penetración 15%</h4>
+        <p style="font-size:13px;margin:6px 0;">Solo <strong>39 operaciones a crédito</strong> sobre 257 ventas. Oportunidad clara de F&amp;I.</p>
+      </div>
+      <div class="modal-section">
+        <h4>🥊 Competencia plaza Ambato</h4>
+        <ul>
+          <li><strong>Suzuki:</strong> 22 unidades.</li>
+          <li><strong>Kia:</strong> Ambato 51, Atahualpa 35, Ficoa 20, Riobamba 49, Latacunga 36.</li>
+          <li><strong>Ambacar:</strong> Mariano Sánchez 31, Matriz 45, Latacunga 16, Puyo 11, Riobamba 35.</li>
+        </ul>
+      </div>
+      <div class="mkt-block">
+        <strong>📣 Requerimientos de Marketing:</strong> fotos de entregas con etiquetado de clientes · presencia en redes con videos · eventos Día del Niño, Día del Padre y Mundial FIFA 2026 · campaña Across $28.000.
+      </div>`
+  },
+  latacunga: {
+    title: "🚙 Agencia Latacunga — Detalle Presentación",
+    range: "Cotopaxi",
+    content: `
+      <div class="modal-section">
+        <h4>📋 Qué presentó la agencia</h4>
+        <ul>
+          <li><strong>Portada Agencia Latacunga — Andinamotors</strong>.</li>
+          <li><strong>Ventas por canal Mayo</strong> (15 / 16 / 17 U por canal).</li>
+          <li><strong>Ventas por modelo</strong>.</li>
+          <li><strong>Venta de accesorios Mayo</strong>.</li>
+          <li><strong>Ventas vs otras marcas + alineación con Marketing</strong>.</li>
+          <li><strong>Créditos, Seguros y Rastreos</strong>.</li>
+          <li><strong>KPIs Mayo y Ene–May por asesores</strong>.</li>
+          <li><strong>Cumplimiento Agencia</strong>.</li>
+          <li><strong>Análisis de Cartera</strong>.</li>
+          <li><strong>Rebates Mayo</strong>.</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h4>⭐ Puntos a resaltar</h4>
+        <div class="stats-grid">
+          <div class="stat"><div class="v">122%</div><div class="l">Cumpl. Mayo</div></div>
+          <div class="stat"><div class="v">22 / 18</div><div class="l">Real / Obj</div></div>
+          <div class="stat"><div class="v">+4 U</div><div class="l">vs KPI Crédito</div></div>
+          <div class="stat"><div class="v">22</div><div class="l">Obj. Junio</div></div>
+        </div>
+        <ul>
+          <li><strong>Agencia más fuerte en cumplimiento mensual</strong> de la red.</li>
+          <li><strong>Única agencia que supera el KPI 50% de Crédito</strong>: 10 facturas vs 6 esperadas → +4.</li>
+          <li><strong>Mayor número de solicitudes de crédito</strong>: 31 solicitudes · 17 aprobaciones.</li>
+          <li><strong>Brecha aprobado–facturado más controlada (7 U)</strong>.</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h4>💳 Crédito · perfil</h4>
+        <table class="data" style="margin:6px 0;">
+          <thead><tr><th>Etapa</th><th class="num">Unidades</th></tr></thead>
+          <tbody>
+            <tr><td>Solicitudes</td><td class="num">31</td></tr>
+            <tr><td>Aprobaciones</td><td class="num">17</td></tr>
+            <tr><td>Facturas a crédito</td><td class="num ok">10</td></tr>
+            <tr><td>KPI 50% esperado</td><td class="num">6</td></tr>
+            <tr class="total"><td>Diferencia sobre KPI</td><td class="num ok">+4</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mkt-block">
+        <strong>📣 Requerimiento de Marketing:</strong> <strong>Fidelización</strong> y <strong>Marketing Digital</strong>. Alineación comercial con MKT.
+      </div>`
+  },
+  riobamba: {
+    title: "🏔️ Agencia Riobamba — Detalle Presentación",
+    range: "Chimborazo",
+    content: `
+      <div class="modal-section">
+        <h4>📋 Qué presentó la agencia</h4>
+        <ul>
+          <li><strong>Resultados Mensuales Ag. Riobamba — Mayo 2026</strong>.</li>
+          <li><strong>Cumplimiento general y resultados mensuales</strong>.</li>
+          <li><strong>Resultados por canal Ene–May</strong>.</li>
+          <li><strong>Acumulados Ene–May</strong>, indicadores y comparativo vs mes anterior.</li>
+          <li><strong>Resultados por asesor</strong>: M. Moreira y A. Velarde.</li>
+          <li><strong>Resultados Mayo — Marcas</strong>.</li>
+          <li><strong>Entrega de Vehículos</strong>.</li>
+          <li><strong>Revisión de Cartera</strong> y cartera vencida.</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h4>⭐ Puntos a resaltar</h4>
+        <div class="stats-grid">
+          <div class="stat"><div class="v">117%</div><div class="l">Cumpl. Mayo</div></div>
+          <div class="stat"><div class="v">27 / 23</div><div class="l">Real / Obj</div></div>
+          <div class="stat"><div class="v">0</div><div class="l">Facturas Crédito</div></div>
+          <div class="stat"><div class="v">30</div><div class="l">Obj. Junio</div></div>
+        </div>
+        <ul>
+          <li><strong>Segunda agencia más fuerte</strong> en cumplimiento mensual de la red.</li>
+          <li>Análisis explícito de <strong>cartera y cartera vencida</strong>.</li>
+          <li>Asesores: <strong>M. Moreira y A. Velarde</strong>.</li>
+        </ul>
+      </div>
+      <div class="modal-section">
+        <h4>⚠️ Foco crítico: Crédito sin cierre</h4>
+        <table class="data" style="margin:6px 0;">
+          <thead><tr><th>Etapa</th><th class="num">Unidades</th></tr></thead>
+          <tbody>
+            <tr><td>Solicitudes</td><td class="num">13</td></tr>
+            <tr><td>Aprobaciones</td><td class="num">9</td></tr>
+            <tr><td>Facturas a crédito</td><td class="num bad">0</td></tr>
+            <tr><td>KPI 50% esperado</td><td class="num">3</td></tr>
+            <tr class="total"><td>Brecha aprobado–facturado</td><td class="num bad">9</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;margin:6px 0;"><strong>Todo el funnel se quedó en aprobación sin cerrar.</strong> 9 operaciones aprobadas no llegaron a factura.</p>
+      </div>
+      <div class="modal-section">
+        <h4>📅 Junio</h4>
+        <p style="font-size:13px;margin:6px 0;">Objetivo <strong>30 unidades</strong> (+7 sobre mayo, <strong>23% del total red</strong>).</p>
+      </div>
+      <div class="mkt-block">
+        <strong>📣 Requerimientos de Marketing:</strong> <em>la agencia no formalizó un listado específico.</em> <strong>Acción:</strong> solicitar listado MKT para Junio.
+      </div>`
+  }
+};
+
 function openTopic(key) {
   const t = TOPICOS[key]; if (!t) return;
-  document.getElementById('topic-content').innerHTML = '<h3>'+t.title+'</h3><p style="color:var(--muted);font-size:12px;margin-top:-8px;">'+t.range+'</p>'+t.content;
+  document.getElementById('topic-content').innerHTML = '<h3>'+t.title+'</h3>'+t.content;
   document.getElementById('topic-modal').classList.add('open');
 }
 function closeTopic() { document.getElementById('topic-modal').classList.remove('open'); }
 function closeTopicIfBackdrop(e) { if (e.target.id === 'topic-modal') closeTopic(); }
+
+function openAgency(key) {
+  const a = AGENCIAS[key]; if (!a) return;
+  document.getElementById('agency-content').innerHTML = '<h3>'+a.title+'</h3><p style="color:var(--muted);font-size:12px;margin-top:-8px;">'+a.range+'</p>'+a.content;
+  document.getElementById('agency-modal').classList.add('open');
+}
+function closeAgency() { document.getElementById('agency-modal').classList.remove('open'); }
+function closeAgencyIfBackdrop(e) { if (e.target.id === 'agency-modal') closeAgency(); }
+
 function expandAll() { document.querySelectorAll('details.section').forEach(d => d.open = true); }
 function collapseAll() { document.querySelectorAll('details.section').forEach(d => d.open = false); }
 function switchTab(btn, panelId) {
